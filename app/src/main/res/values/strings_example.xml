@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">Digital Clock</string>
-    <string name="spotify_refresh_token"></string>
-    <string name="spotify_authorization"></string>
-    <string name="owm_api_key"></string>
+    <string name="app_name_test">Digital Clock</string>
+    <string name="spotify_refresh_token_test"></string>
+    <string name="spotify_authorization_test"></string>
+    <string name="owm_api_key_test"></string>
 </resources>
+
+<!--Note: Remove "_test" from the name-->

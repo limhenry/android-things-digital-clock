@@ -11,6 +11,7 @@ import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.Cast;
@@ -152,6 +153,8 @@ public class CurrentPlaying {
                         .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                             @Override
                             public void onConnected(@Nullable Bundle bundle) {
+                                Toast toast = Toast.makeText(context, "GoogleApiClient.onConnected()" + route.getName(), Toast.LENGTH_SHORT);
+                                toast.show();
                                 Log.i("MediaRouter", "GoogleApiClient.onConnected()" + route.getName());
                                 Log.i("MediaRouter", "Bundle " + bundle);
                             }
@@ -164,6 +167,8 @@ public class CurrentPlaying {
                         .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
                             @Override
                             public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                                Toast toast = Toast.makeText(context, "GoogleApiClient.onConnectionFailed()" + connectionResult, Toast.LENGTH_SHORT);
+                                toast.show();
                                 Log.i("MediaRouter", "GoogleApiClient.onConnectionFailed()" + connectionResult);
                             }
                         })
