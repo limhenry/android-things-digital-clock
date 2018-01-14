@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
     };
     private Handler ambientModeHandler;
     private Runnable ambientModeRunnable;
+    private CurrentPlaying currentPlaying;
 
     public static Context getContext() {
         return mContext;
@@ -36,9 +37,18 @@ public class MainActivity extends Activity {
 
     public void startSpotify(View view) {
         ambientModeHandler.removeCallbacks(ambientModeRunnable);
-//        adjustBrightness(210);
         Intent intent = new Intent(this, SpotifyPlayerActivity.class);
         startActivity(intent);
+    }
+
+    public void startCastControl(View view) {
+        ambientModeHandler.removeCallbacks(ambientModeRunnable);
+        Intent intent = new Intent(this, CastControlActivity.class);
+        startActivity(intent);
+    }
+
+    public void refreshMediaRoute(View view) {
+        currentPlaying.refreshMediaRoute();
     }
 
     public void toggleAmbient(View view) {
@@ -112,7 +122,7 @@ public class MainActivity extends Activity {
         owmWeather = new OWMWeather(this);
         owmWeather.getWeather();
 
-        new CurrentPlaying(this);
+        currentPlaying = new CurrentPlaying(this);
 
         updateTime();
         toggleAmbientMode();

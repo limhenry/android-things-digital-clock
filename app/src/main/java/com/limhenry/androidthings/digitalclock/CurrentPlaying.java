@@ -225,6 +225,8 @@ public class CurrentPlaying {
         if (isChromecastActive()) {
             MediaRouter.RouteInfo route = getActiveChromecastRoute();
             if (route != null) {
+                Toast toast = Toast.makeText(context, "Found: " + route.getName(), Toast.LENGTH_SHORT);
+                toast.show();
                 if (!route.isSelected()) {
                     mMediaRouter.selectRoute(route);
                 }
@@ -234,5 +236,9 @@ public class CurrentPlaying {
             return route;
         }
         return null;
+    }
+
+    public void refreshMediaRoute() {
+        getActiveMediaRoute();
     }
 }
