@@ -86,7 +86,12 @@ public class CurrentPlaying {
                                                                 while (current_playing.size() <= position)
                                                                     current_playing.add(null);
                                                                 MediaMetadata music_meta = mRemoteMediaPlayerItem.getMediaInfo().getMetadata();
-                                                                current_playing.set(position, music_meta.getString(MediaMetadata.KEY_TITLE) + " | " + music_meta.getString(MediaMetadata.KEY_ARTIST));
+                                                                if (music_meta.getString(MediaMetadata.KEY_ARTIST) != null) {
+                                                                    current_playing.set(position, music_meta.getString(MediaMetadata.KEY_TITLE) + " | " + music_meta.getString(MediaMetadata.KEY_ARTIST));
+                                                                }
+                                                                else {
+                                                                    current_playing.set(position, music_meta.getString(MediaMetadata.KEY_TITLE));
+                                                                }
                                                                 currentPlayingAdapter.refreshEvents(current_playing);
                                                             } else {
                                                                 while (current_playing.size() <= position)
