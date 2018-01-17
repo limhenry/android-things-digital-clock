@@ -5,15 +5,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -48,12 +44,9 @@ import jp.wasabeef.blurry.Blurry;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 import static com.limhenry.androidthings.digitalclock.GlideOptions.bitmapTransform;
-//import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-//import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 public class SpotifyPlayerActivity extends Activity {
     private static SpotifyPlayerActivity sInstance;
-    private Context context;
     private RequestQueue mRequestQueue;
     private String current_playing = "";
     private Boolean isPlaying = false;
@@ -69,7 +62,6 @@ public class SpotifyPlayerActivity extends Activity {
         if (mRequestQueue == null) {
             mRequestQueue = Volley.newRequestQueue(getApplicationContext());
         }
-
         return mRequestQueue;
     }
 
@@ -173,7 +165,7 @@ public class SpotifyPlayerActivity extends Activity {
                         @Override
                         public void onResponse(String response) {
                             isPlaying = !isPlaying;
-                            ImageView img_playpause = (ImageView) findViewById(R.id.img_play_pause);
+                            ImageView img_playpause = findViewById(R.id.img_play_pause);
                             if (isPlaying) {
                                 img_playpause.setImageResource(R.drawable.ic_pause_circle_filled_black_24dp);
                             } else {
@@ -225,7 +217,7 @@ public class SpotifyPlayerActivity extends Activity {
                                 String artistName = data.getJSONObject("item").getJSONArray("artists").getJSONObject(0).getString("name");
                                 String deviceName = data.getJSONObject("device").getString("name");
                                 String album_url = data.getJSONObject("item").getJSONObject("album").getJSONArray("images").getJSONObject(1).getString("url");
-                                ImageView img_playpause = (ImageView) findViewById(R.id.img_play_pause);
+                                ImageView img_playpause = findViewById(R.id.img_play_pause);
                                 SimpleDateFormat df = new SimpleDateFormat("hh:mm");
                                 df.setTimeZone(TimeZone.getTimeZone("GMT+8"));
 
@@ -237,14 +229,14 @@ public class SpotifyPlayerActivity extends Activity {
                                     img_playpause.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
                                 }
 
-                                TextView txt_deviceName = (TextView) findViewById(R.id.txt_device_name);
+                                TextView txt_deviceName = findViewById(R.id.txt_device_name);
                                 txt_deviceName.setText(deviceName);
-                                TextView txt_clockText = (TextView) findViewById(R.id.clockText);
+                                TextView txt_clockText = findViewById(R.id.clockText);
                                 txt_clockText.setText(df.format(new Date()));
 
                                 if (isFirstLoad) {
-                                    LinearLayout loading_layout = (LinearLayout) findViewById(R.id.loading_layout);
-                                    LinearLayout music_info = (LinearLayout) findViewById(R.id.music_info);
+                                    LinearLayout loading_layout = findViewById(R.id.loading_layout);
+                                    LinearLayout music_info = findViewById(R.id.music_info);
                                     loading_layout.setVisibility(View.GONE);
                                     music_info.setVisibility(View.VISIBLE);
                                     isFirstLoad = false;
@@ -252,10 +244,10 @@ public class SpotifyPlayerActivity extends Activity {
 
                                 if (!current_playing.equals(songID)) {
                                     current_playing = songID;
-                                    TextView txt_songName = (TextView) findViewById(R.id.textView7);
+                                    TextView txt_songName = findViewById(R.id.textView7);
                                     txt_songName.setText(songName);
 
-                                    TextView albumArtistName = (TextView) findViewById(R.id.textView8);
+                                    TextView albumArtistName = findViewById(R.id.textView8);
                                     albumArtistName.setText(albumName + " | " + artistName);
 
                                     Glide.with(SpotifyPlayerActivity.this)
@@ -293,6 +285,7 @@ public class SpotifyPlayerActivity extends Activity {
 
                             } catch (JSONException e) {
                                 Log.d("Response", e.toString());
+                                getAccessToken();
                             }
                         }
                     },
@@ -370,8 +363,15 @@ public class SpotifyPlayerActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sInstance = this;
-
         isFirstLoad = true;
+
+        setContentView(R.layout.spotify_player_activity);
+        getCurrentlyPlaying();
+
+        SimpleDateFormat df = new SimpleDateFormat("hh:mm");
+        df.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        TextView txt_clockText = findViewById(R.id.clockText);
+        txt_clockText.setText(df.format(new Date()));
 
         DisplayManager displayManager = (DisplayManager) getApplicationContext().getSystemService(Context.DISPLAY_SERVICE);
         Display[] displays = displayManager.getDisplays();
@@ -381,14 +381,6 @@ public class SpotifyPlayerActivity extends Activity {
             screenManager.setBrightnessMode(ScreenManager.BRIGHTNESS_MODE_MANUAL);
             screenManager.setBrightness(210);
         }
-
-        setContentView(R.layout.spotify_player_activity);
-        getAccessToken();
-
-        SimpleDateFormat df = new SimpleDateFormat("hh:mm");
-        df.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-        TextView txt_clockText = (TextView) findViewById(R.id.clockText);
-        txt_clockText.setText(df.format(new Date()));
     }
 
     @Override
@@ -402,7 +394,7 @@ public class SpotifyPlayerActivity extends Activity {
 
         public DownloadImageTask(ImageView bmImage) {
             this.bmImage = bmImage;
-            this.album_image = (SquareImageView) findViewById(R.id.album_image);
+            this.album_image = findViewById(R.id.album_image);
         }
 
         protected Bitmap doInBackground(String... urls) {

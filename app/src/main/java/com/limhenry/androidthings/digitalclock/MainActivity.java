@@ -6,16 +6,12 @@ import android.content.Intent;
 import android.hardware.display.DisplayManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.vision.Frame;
 import com.google.android.things.device.ScreenManager;
 
 import java.text.SimpleDateFormat;
@@ -45,25 +41,21 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
-    public void startCalendar(View view) {
-        ambientModeHandler.removeCallbacks(ambientModeRunnable);
-        Intent intent = new Intent(this, CalendarActivity.class);
-        startActivity(intent);
-    }
+//    public void startCalendar(View view) {
+//        ambientModeHandler.removeCallbacks(ambientModeRunnable);
+//        Intent intent = new Intent(this, CalendarActivity.class);
+//        startActivity(intent);
+//    }
 
     public void refreshMediaRoute(View view) {
         currentPlaying.refreshMediaRoute();
     }
 
-    public void toggleAmbient(View view) {
-        toggleAmbientMode();
-    }
-
     public void toggleAmbientMode() {
         adjustBrightness(210);
-        final LinearLayout layout_control = (LinearLayout) findViewById(R.id.layout_control);
-        final LinearLayout layout_datetime = (LinearLayout) findViewById(R.id.layout_datetime);
-        final ImageView ambient_bg = (ImageView) findViewById(R.id.ambient_bg);
+        final LinearLayout layout_control = findViewById(R.id.layout_control);
+        final LinearLayout layout_datetime = findViewById(R.id.layout_datetime);
+        final ImageView ambient_bg = findViewById(R.id.ambient_bg);
         final LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) layout_datetime.getLayoutParams();
 
         ambient_bg.setVisibility(View.INVISIBLE);
@@ -86,12 +78,12 @@ public class MainActivity extends Activity {
 
     public void updateTime() {
         final SimpleDateFormat time = new SimpleDateFormat("hh:mm");
-        final TextView txt_clockText = (TextView) findViewById(R.id.txt_clock_time);
+        final TextView txt_clockText = findViewById(R.id.txt_clock_time);
         time.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         txt_clockText.setText(time.format(new Date()));
 
         final SimpleDateFormat date = new SimpleDateFormat("EEEE, MMM dd");
-        final TextView txt_clock_date = (TextView) findViewById(R.id.txt_clock_date);
+        final TextView txt_clock_date = findViewById(R.id.txt_clock_date);
         date.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         txt_clock_date.setText(date.format(new Date()));
 
@@ -131,10 +123,10 @@ public class MainActivity extends Activity {
         updateTime();
         toggleAmbientMode();
 
-        LinearLayout layout_time_weather = (LinearLayout) findViewById(R.id.layout_time_weather);
+        LinearLayout layout_time_weather = findViewById(R.id.layout_time_weather);
         layout_time_weather.setOnClickListener(mWeatherListener);
 
-        LinearLayout main_linear = (LinearLayout) findViewById(R.id.main_linear);
+        LinearLayout main_linear = findViewById(R.id.main_linear);
         main_linear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
