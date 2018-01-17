@@ -36,18 +36,25 @@ android {
 
 repositories {
     jcenter()
+    google()
     mavenCentral()
     maven { url "https://jitpack.io" }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compileOnly 'com.google.android.things:androidthings:0.6-devpreview'
-    compile 'com.android.support:mediarouter-v7:26.+'
-    compile 'com.google.android.gms:play-services-cast-framework:10.0.1'
-    compile 'com.android.volley:volley:1.1.0'
-    compile 'org.altbeacon:android-beacon-library:2+'
-    compile 'com.google.android.gms:play-services:+'
-    compile 'com.github.KwabenBerko:OpenWeatherMap-Android-Library:v1.1.1'
+    implementation 'com.google.android.gms:play-services-cast-framework:10.0.1'
+    implementation 'com.android.volley:volley:1.1.0'
+    implementation 'org.altbeacon:android-beacon-library:2+'
+    implementation 'com.google.android.gms:play-services:11.6.0'
+    implementation 'jp.wasabeef:blurry:2.1.1'
+    implementation 'com.github.KwabenBerko:OpenWeatherMap-Android-Library:v1.1.1'
+    implementation 'com.google.apis:google-api-services-calendar:v3-rev282-1.23.0'
+    implementation 'com.github.bumptech.glide:glide:4.5.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.5.0'
+    implementation 'jp.wasabeef:glide-transformations:3.0.1'
+    implementation 'com.google.api-client:google-api-client:1.23.0'
+    implementation 'com.google.api-client:google-api-client-android:1.23.0'
 }

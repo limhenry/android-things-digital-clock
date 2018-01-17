@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -9,9 +8,7 @@
     android:background="#000000"
     android:gravity="center|center"
     android:orientation="vertical"
-    tools:context=".MainActivity"
-    android:onClick="toggleAmbient">
-
+    tools:context=".MainActivity">
 
     <ImageView
         android:id="@+id/img_wallpaper"
@@ -28,6 +25,7 @@
         android:visibility="invisible" />
 
     <LinearLayout
+        android:id="@+id/main_linear"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -38,21 +36,22 @@
             android:id="@+id/layout_datetime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="56dp">
+            android:layout_marginTop="56dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/txt_clock_time"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="-6dp"
                 android:fontFamily="@font/roboto_regular"
                 android:gravity="center|center"
+                android:onClick="refreshMediaRoute"
                 android:text="12:33"
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"
-                android:layout_marginBottom="-6dp"
-                android:textSize="120dp"
-                android:onClick="refreshMediaRoute"/>
+                android:textSize="120dp" />
 
             <LinearLayout
                 android:id="@+id/layout_time_weather"
@@ -157,8 +156,8 @@
                 android:layout_height="wrap_content"
                 android:onClick="startSpotify"
                 android:orientation="vertical"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp">
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp">
 
                 <ImageView
                     android:id="@+id/app_spotify"
@@ -182,13 +181,13 @@
             <!--<LinearLayout-->
                 <!--android:layout_width="wrap_content"-->
                 <!--android:layout_height="wrap_content"-->
-                <!--android:onClick="startCastControl"-->
+                <!--android:onClick="startCalendar"-->
                 <!--android:orientation="vertical"-->
-                <!--android:layout_marginLeft="12dp"-->
-                <!--android:layout_marginRight="12dp">-->
+                <!--android:layout_marginLeft="18dp"-->
+                <!--android:layout_marginRight="18dp">-->
 
                 <!--<ImageView-->
-                    <!--android:id="@+id/app_home"-->
+                    <!--android:id="@+id/app_calendar"-->
                     <!--android:layout_width="64dp"-->
                     <!--android:layout_height="64dp"-->
                     <!--android:layout_marginBottom="8dp"-->
@@ -200,7 +199,7 @@
                     <!--android:id="@+id/app_home_text"-->
                     <!--android:layout_width="match_parent"-->
                     <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Home"-->
+                    <!--android:text="Calendar"-->
                     <!--android:textAlignment="center"-->
                     <!--android:textColor="#FFFFFF"-->
                     <!--android:textSize="16dp" />-->

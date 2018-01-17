@@ -70,61 +70,64 @@ public class CurrentPlaying {
                                     final GoogleApiClient mApiClientItem = mApiClient.get(position);
 
                                     LaunchOptions launchOptions = new LaunchOptions.Builder().setRelaunchIfRunning(false).build();
-                                    Cast.CastApi.launchApplication(mApiClientItem, applicationMetadata.getApplicationId(), launchOptions).setResultCallback(new ResultCallback<Cast.ApplicationConnectionResult>() {
-                                        @Override
-                                        public void onResult(@NonNull Cast.ApplicationConnectionResult applicationConnectionResult) {
-                                            while (mRemoteMediaPlayer.size() <= position)
-                                                mRemoteMediaPlayer.add(null);
-                                            mRemoteMediaPlayer.set(position, new RemoteMediaPlayer());
-                                            final RemoteMediaPlayer mRemoteMediaPlayerItem = mRemoteMediaPlayer.get(position);
-                                            mRemoteMediaPlayerItem.setOnStatusUpdatedListener(new RemoteMediaPlayer.OnStatusUpdatedListener() {
-                                                @Override
-                                                public void onStatusUpdated() {
-                                                    if (mRemoteMediaPlayerItem.getMediaInfo() != null) {
-                                                        if (mRemoteMediaPlayerItem.getMediaInfo().getMetadata() != null) {
-                                                            if (mRemoteMediaPlayerItem.getMediaStatus().getPlayerState() == 2) {
-                                                                while (current_playing.size() <= position)
-                                                                    current_playing.add(null);
-                                                                MediaMetadata music_meta = mRemoteMediaPlayerItem.getMediaInfo().getMetadata();
-                                                                if (music_meta.getString(MediaMetadata.KEY_ARTIST) != null) {
-                                                                    current_playing.set(position, music_meta.getString(MediaMetadata.KEY_TITLE) + " | " + music_meta.getString(MediaMetadata.KEY_ARTIST));
+                                    try {
+                                        Cast.CastApi.launchApplication(mApiClientItem, applicationMetadata.getApplicationId(), launchOptions).setResultCallback(new ResultCallback<Cast.ApplicationConnectionResult>() {
+                                            @Override
+                                            public void onResult(@NonNull Cast.ApplicationConnectionResult applicationConnectionResult) {
+                                                while (mRemoteMediaPlayer.size() <= position)
+                                                    mRemoteMediaPlayer.add(null);
+                                                mRemoteMediaPlayer.set(position, new RemoteMediaPlayer());
+                                                final RemoteMediaPlayer mRemoteMediaPlayerItem = mRemoteMediaPlayer.get(position);
+                                                mRemoteMediaPlayerItem.setOnStatusUpdatedListener(new RemoteMediaPlayer.OnStatusUpdatedListener() {
+                                                    @Override
+                                                    public void onStatusUpdated() {
+                                                        if (mRemoteMediaPlayerItem.getMediaInfo() != null) {
+                                                            if (mRemoteMediaPlayerItem.getMediaInfo().getMetadata() != null) {
+                                                                if (mRemoteMediaPlayerItem.getMediaStatus().getPlayerState() == 2) {
+                                                                    while (current_playing.size() <= position)
+                                                                        current_playing.add(null);
+                                                                    MediaMetadata music_meta = mRemoteMediaPlayerItem.getMediaInfo().getMetadata();
+                                                                    if (music_meta.getString(MediaMetadata.KEY_ARTIST) != null) {
+                                                                        current_playing.set(position, music_meta.getString(MediaMetadata.KEY_TITLE) + " | " + music_meta.getString(MediaMetadata.KEY_ARTIST));
+                                                                    }
+                                                                    else {
+                                                                        current_playing.set(position, music_meta.getString(MediaMetadata.KEY_TITLE));
+                                                                    }
+                                                                    currentPlayingAdapter.refreshEvents(current_playing);
+                                                                } else {
+                                                                    while (current_playing.size() <= position)
+                                                                        current_playing.add(null);
+                                                                    current_playing.set(position, null);
+                                                                    currentPlayingAdapter.refreshEvents(current_playing);
                                                                 }
-                                                                else {
-                                                                    current_playing.set(position, music_meta.getString(MediaMetadata.KEY_TITLE));
-                                                                }
-                                                                currentPlayingAdapter.refreshEvents(current_playing);
-                                                            } else {
-                                                                while (current_playing.size() <= position)
-                                                                    current_playing.add(null);
-                                                                current_playing.set(position, null);
-                                                                currentPlayingAdapter.refreshEvents(current_playing);
                                                             }
                                                         }
                                                     }
+                                                });
+                                                try {
+                                                    Cast.CastApi.setMessageReceivedCallbacks(mApiClientItem, mRemoteMediaPlayerItem.getNamespace(), mRemoteMediaPlayerItem);
+                                                } catch (IOException e) {
+                                                    Log.e("MediaRouter", "Exception while creating media channel ", e);
+                                                } catch (NullPointerException e) {
+                                                    Log.e("MediaRouter", "Something wasn't reinitialized for reconnectChannels", e);
                                                 }
-                                            });
-                                            try {
-                                                Cast.CastApi.setMessageReceivedCallbacks(mApiClientItem, mRemoteMediaPlayerItem.getNamespace(), mRemoteMediaPlayerItem);
-                                            } catch (IOException e) {
-                                                Log.e("MediaRouter", "Exception while creating media channel ", e);
-                                            } catch (NullPointerException e) {
-                                                Log.e("MediaRouter", "Something wasn't reinitialized for reconnectChannels", e);
-                                            }
 
-                                            mRemoteMediaPlayer.get(position).requestStatus(mApiClientItem).setResultCallback(new ResultCallback<RemoteMediaPlayer.MediaChannelResult>() {
-                                                @Override
-                                                public void onResult(@NonNull RemoteMediaPlayer.MediaChannelResult mediaChannelResult) {
-                                                    Log.i("MediaRouter", "requestStatus() " + mediaChannelResult);
+                                                mRemoteMediaPlayer.get(position).requestStatus(mApiClientItem).setResultCallback(new ResultCallback<RemoteMediaPlayer.MediaChannelResult>() {
+                                                    @Override
+                                                    public void onResult(@NonNull RemoteMediaPlayer.MediaChannelResult mediaChannelResult) {
+                                                        Log.i("MediaRouter", "requestStatus() " + mediaChannelResult);
+                                                    }
+                                                });
+
+                                                try {
+                                                    Cast.CastApi.requestStatus(mApiClientItem);
+                                                } catch (IOException e) {
+                                                    Log.e("MediaRouter", "Couldn't request status", e);
                                                 }
-                                            });
-
-                                            try {
-                                                Cast.CastApi.requestStatus(mApiClientItem);
-                                            } catch (IOException e) {
-                                                Log.e("MediaRouter", "Couldn't request status", e);
                                             }
-                                        }
-                                    });
+                                        });
+                                    }
+                                    catch (Exception e) {}
                                 }
                             }
                         }
