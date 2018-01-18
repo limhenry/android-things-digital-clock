@@ -8,12 +8,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Display;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.google.android.things.device.ScreenManager;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -34,18 +32,6 @@ public class MainActivity extends Activity {
     public static Context getContext() {
         return mContext;
     }
-
-    public void startSpotify(View view) {
-        Intent intent = new Intent(this, SpotifyPlayerActivity.class);
-        startActivity(intent);
-        ambientModeHandler.removeCallbacks(ambientModeRunnable);
-    }
-
-//    public void startCalendar(View view) {
-//        ambientModeHandler.removeCallbacks(ambientModeRunnable);
-//        Intent intent = new Intent(this, CalendarActivity.class);
-//        startActivity(intent);
-//    }
 
     public void refreshMediaRoute(View view) {
         currentPlaying.refreshMediaRoute();
@@ -135,12 +121,22 @@ public class MainActivity extends Activity {
             }
         });
 
+        LinearLayout app_spotify = findViewById(R.id.app_spotify);
+        app_spotify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ambientModeHandler.removeCallbacks(ambientModeRunnable);
+                Intent intent = new Intent(MainActivity.this, SpotifyPlayerActivity.class);
+                startActivity(intent);
+            }
+        });
+
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
                 owmWeather.getWeather();
             }
-        }, 300000);
+        }, 150000);
 
         shouldExecuteOnResume = false;
     }

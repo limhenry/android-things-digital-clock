@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:layout_weight="0"
-            android:src="@drawable/ic_audiotrack_dark" />
+            android:src="@drawable/ic_audiotrack_dark"/>
 
         <TextView
             android:id="@+id/txt_current_playing"
