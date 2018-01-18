@@ -188,27 +188,27 @@ public class SpotifyPlayerActivity extends Activity {
                         albumArtistName.setText(albumName + " | " + artistName);
 
                         Glide.with(SpotifyPlayerActivity.this)
-                            .asBitmap()
-                            .load(album_url)
-                            .apply(bitmapTransform(new RoundedCornersTransformation(8, 0, RoundedCornersTransformation.CornerType.ALL)))
-                            .listener(new RequestListener<Bitmap>() {
-                                @Override
-                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                    return false;
-                                }
-                                @Override
-                                public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                    Blurry.with(SpotifyPlayerActivity.this)
-                                        .radius(80)
-                                        .async()
-                                        .sampling(1)
-                                        .animate(500)
-                                        .from(resource)
-                                        .into((ImageView) findViewById(R.id.imageView4));
-                                    return false;
-                                }
-                            })
-                            .into((SquareImageView) findViewById(R.id.album_image));
+                                .asBitmap()
+                                .load(album_url)
+                                .apply(bitmapTransform(new RoundedCornersTransformation(8, 0, RoundedCornersTransformation.CornerType.ALL)))
+                                .listener(new RequestListener<Bitmap>() {
+                                    @Override
+                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                        return false;
+                                    }
+                                    @Override
+                                    public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                        Blurry.with(SpotifyPlayerActivity.this)
+                                                .radius(80)
+                                                .async()
+                                                .sampling(1)
+                                                .animate(500)
+                                                .from(resource)
+                                                .into((ImageView) findViewById(R.id.imageView4));
+                                        return false;
+                                    }
+                                })
+                                .into((SquareImageView) findViewById(R.id.album_image));
                     }
 
                     setCheckPlayingHandler();
@@ -252,20 +252,6 @@ public class SpotifyPlayerActivity extends Activity {
 
         sInstance = this;
         isFirstLoad = true;
-
-//        SimpleDateFormat df = new SimpleDateFormat("hh:mm");
-//        df.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-//        TextView txt_clockText = findViewById(R.id.clockText);
-//        txt_clockText.setText(df.format(new Date()));
-
-//        DisplayManager displayManager = (DisplayManager) getApplicationContext().getSystemService(Context.DISPLAY_SERVICE);
-//        Display[] displays = displayManager.getDisplays();
-//        if (displays.length > 0) {
-//            int id = displays[0].getDisplayId();
-//            ScreenManager screenManager = new ScreenManager(id);
-//            screenManager.setBrightnessMode(ScreenManager.BRIGHTNESS_MODE_MANUAL);
-//            screenManager.setBrightness(210);
-//        }
     }
 
     @Override

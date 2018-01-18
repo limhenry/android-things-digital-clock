@@ -8,17 +8,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Display;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.google.android.things.device.ScreenManager;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
 public class MainActivity extends Activity {
-    boolean shouldExecuteOnResume;
     private static Context mContext;
+    boolean shouldExecuteOnResume = false;
     private OWMWeather owmWeather;
     private View.OnClickListener mWeatherListener = new View.OnClickListener() {
         public void onClick(View v) {
@@ -101,16 +103,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         mContext = getApplicationContext();
 
-        owmWeather = new OWMWeather(this);
-        owmWeather.getWeather();
-
         currentPlaying = new CurrentPlaying(this);
-
-        updateTime();
-        toggleAmbientMode();
-
-        LinearLayout layout_time_weather = findViewById(R.id.layout_time_weather);
-        layout_time_weather.setOnClickListener(mWeatherListener);
 
         LinearLayout main_linear = findViewById(R.id.main_linear);
         main_linear.setOnClickListener(new View.OnClickListener() {
@@ -130,15 +123,6 @@ public class MainActivity extends Activity {
                 startActivity(intent);
             }
         });
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                owmWeather.getWeather();
-            }
-        }, 150000);
-
-        shouldExecuteOnResume = false;
     }
 
     @Override
@@ -147,6 +131,22 @@ public class MainActivity extends Activity {
         if(shouldExecuteOnResume){
             toggleAmbientMode();
         } else{
+            owmWeather = new OWMWeather(this);
+            owmWeather.getWeather();
+
+            updateTime();
+            toggleAmbientMode();
+
+            LinearLayout layout_time_weather = findViewById(R.id.layout_time_weather);
+            layout_time_weather.setOnClickListener(mWeatherListener);
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    owmWeather.getWeather();
+                }
+            }, 150000);
+
             shouldExecuteOnResume = true;
         }
     }

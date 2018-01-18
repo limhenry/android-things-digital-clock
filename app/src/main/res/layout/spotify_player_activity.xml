@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/roboto_medium"
-                android:text="12:33"
+                android:text=""
                 android:textAlignment="textEnd"
                 android:textColor="#FFFFFF"
                 android:textSize="16dp" />
