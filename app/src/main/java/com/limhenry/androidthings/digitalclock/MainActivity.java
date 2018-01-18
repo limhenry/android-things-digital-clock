@@ -36,9 +36,9 @@ public class MainActivity extends Activity {
     }
 
     public void startSpotify(View view) {
-        ambientModeHandler.removeCallbacks(ambientModeRunnable);
         Intent intent = new Intent(this, SpotifyPlayerActivity.class);
         startActivity(intent);
+        ambientModeHandler.removeCallbacks(ambientModeRunnable);
     }
 
 //    public void startCalendar(View view) {

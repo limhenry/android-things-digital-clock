@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.hardware.display.DisplayManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -33,7 +31,6 @@ import com.google.android.things.device.ScreenManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -66,7 +63,9 @@ public class SpotifyPlayerActivity extends Activity {
     }
 
     public void closeActivity(View view) {
-        checkPlayingHandler.removeCallbacks(checkPlayingRunnable);
+        if (checkPlayingRunnable != null) {
+            checkPlayingHandler.removeCallbacks(checkPlayingRunnable);
+        }
         finish();
     }
 
@@ -366,7 +365,7 @@ public class SpotifyPlayerActivity extends Activity {
         isFirstLoad = true;
 
         setContentView(R.layout.spotify_player_activity);
-        getCurrentlyPlaying();
+        getAccessToken();
 
         SimpleDateFormat df = new SimpleDateFormat("hh:mm");
         df.setTimeZone(TimeZone.getTimeZone("GMT+8"));
@@ -386,37 +385,5 @@ public class SpotifyPlayerActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-        SquareImageView album_image;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-            this.album_image = findViewById(R.id.album_image);
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap bitmap = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                bitmap = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return bitmap;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            Blurry.with(SpotifyPlayerActivity.this)
-                    .radius(80)
-                    .sampling(1)
-                    .from(result)
-                    .into((ImageView) findViewById(R.id.imageView4));
-            album_image.setImageBitmap(result);
-        }
     }
 }

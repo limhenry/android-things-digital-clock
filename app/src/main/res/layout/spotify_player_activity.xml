@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/roboto_medium"
-                android:text=""
+                android:text="12:33"
                 android:textAlignment="textEnd"
                 android:textColor="#FFFFFF"
                 android:textSize="16dp" />
@@ -201,7 +201,7 @@
                     android:layout_marginRight="12dp"
                     android:layout_weight="1"
                     android:onClick="playPause"
-                    android:src="@drawable/ic_play_circle_filled_black_24dp" />
+                    android:src="@drawable/ic_pause_circle_filled_black_24dp" />
 
                 <ImageView
                     android:id="@+id/img_skip_next"
