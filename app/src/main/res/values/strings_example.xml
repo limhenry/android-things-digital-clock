@@ -3,6 +3,8 @@
     <string name="spotify_refresh_token_test"></string>
     <string name="spotify_authorization_test"></string>
     <string name="owm_api_key_test"></string>
+    <string name="firebase_email_test"></string>
+    <string name="firebase_password_test"></string>
 </resources>
 
 <!--Note: Remove "_test" from the name-->

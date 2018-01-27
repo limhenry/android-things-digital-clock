@@ -6,13 +6,20 @@ import android.content.Intent;
 import android.hardware.display.DisplayManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.things.device.ScreenManager;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,14 +29,11 @@ public class MainActivity extends Activity {
     private static Context mContext;
     boolean shouldExecuteOnResume = false;
     private OWMWeather owmWeather;
-    private View.OnClickListener mWeatherListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            owmWeather.getWeather();
-        }
-    };
+    private View.OnClickListener mWeatherListener;
     private Handler ambientModeHandler;
     private Runnable ambientModeRunnable;
     private CurrentPlaying currentPlaying;
+    private FirebaseAuth mAuth;
 
     public static Context getContext() {
         return mContext;
@@ -128,11 +132,30 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(shouldExecuteOnResume){
+        if (shouldExecuteOnResume) {
             toggleAmbientMode();
-        } else{
+        } else {
             owmWeather = new OWMWeather(this);
             owmWeather.getWeather();
+
+            FirebaseApp.initializeApp(this);
+            mAuth = FirebaseAuth.getInstance();
+
+            mAuth.signInWithEmailAndPassword(getString(R.string.firebase_email), getString(R.string.firebase_password))
+            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        new HomeAlarm(MainActivity.this);
+                    }
+                }
+            });
+
+            mWeatherListener = new View.OnClickListener() {
+                public void onClick(View v) {
+                    owmWeather.getWeather();
+                }
+            };
 
             updateTime();
             toggleAmbientMode();

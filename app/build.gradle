@@ -43,8 +43,7 @@ repositories {
 
 dependencies {
     compileOnly 'com.google.android.things:androidthings:0.6-devpreview'
-    implementation 'com.google.android.gms:play-services-cast-framework:10.0.1'
-//    implementation 'com.android.volley:volley:1.1.0'
+    implementation 'com.google.android.gms:play-services-cast-framework:11.6.0'
     implementation 'com.google.android.gms:play-services:11.6.0'
     implementation 'jp.wasabeef:blurry:2.1.1'
     implementation 'com.github.KwabenBerko:OpenWeatherMap-Android-Library:v1.1.1'
@@ -56,4 +55,11 @@ dependencies {
     implementation 'com.google.api-client:google-api-client-android:1.23.0'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.github.stealthcopter:AndroidNetworkTools:0.3.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
+    compile 'com.google.firebase:firebase-core:11.6.0'
+    compile 'com.google.firebase:firebase-database:11.6.0'
+    compile 'com.google.firebase:firebase-auth:11.6.0'
 }
+
+apply plugin: 'com.google.gms.google-services'
