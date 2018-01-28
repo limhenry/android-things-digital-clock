@@ -34,6 +34,7 @@ public class MainActivity extends Activity {
     private Runnable ambientModeRunnable;
     private CurrentPlaying currentPlaying;
     private FirebaseAuth mAuth;
+    private HomeAlarm homeAlarm;
 
     public static Context getContext() {
         return mContext;
@@ -41,6 +42,7 @@ public class MainActivity extends Activity {
 
     public void refreshMediaRoute(View view) {
         currentPlaying.refreshMediaRoute();
+        homeAlarm.setScanNetworkHandler();
     }
 
     public void toggleAmbientMode() {
@@ -146,7 +148,7 @@ public class MainActivity extends Activity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        new HomeAlarm(MainActivity.this);
+                        homeAlarm = new HomeAlarm(MainActivity.this);
                     }
                 }
             });

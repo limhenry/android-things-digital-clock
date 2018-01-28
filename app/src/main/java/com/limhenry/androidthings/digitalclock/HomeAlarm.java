@@ -12,6 +12,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -86,7 +90,6 @@ public class HomeAlarm {
         }
 
         Log.i("Scan Network", "Finish Scan: " + devicesAddress.size());
-
         updateFirebase();
     }
 

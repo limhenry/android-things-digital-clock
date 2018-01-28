@@ -22,8 +22,12 @@ import com.google.android.gms.cast.RemoteMediaPlayer;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.images.WebImage;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class CurrentPlaying {
@@ -38,6 +42,35 @@ public class CurrentPlaying {
     private ArrayList<String> current_playing = new ArrayList<>();
     private ArrayList<RemoteMediaPlayer> mRemoteMediaPlayer = new ArrayList<>();
     private CurrentPlayingListAdapter currentPlayingAdapter;
+    private DatabaseReference mDatabase;
+    private ArrayList<AlbumCover> albumCovers;
+
+    public class FirebaseMusicInfo implements Serializable {
+        public ArrayList albumCover;
+        public String artist;
+        public String title;
+        public Integer isPlaying;
+
+        public FirebaseMusicInfo(String title, String artist, Integer isPlaying, ArrayList albumCover) {
+            this.albumCover = albumCover;
+            this.artist = artist;
+            this.title = title;
+            this.isPlaying = isPlaying;
+        }
+    }
+
+    public class AlbumCover implements Serializable {
+        public String width;
+        public String height;
+        public String url;
+
+        public AlbumCover(String width, String height, String url) {
+            this.width = width;
+            this.height = height;
+            this.url = url;
+        }
+    }
+
     private MediaRouter.Callback mMediaRouterCallback = new MediaRouter.Callback() {
         @Override
         public void onRouteAdded(MediaRouter router, MediaRouter.RouteInfo route) {
@@ -83,21 +116,33 @@ public class CurrentPlaying {
                                                     public void onStatusUpdated() {
                                                         if (mRemoteMediaPlayerItem.getMediaInfo() != null) {
                                                             if (mRemoteMediaPlayerItem.getMediaInfo().getMetadata() != null) {
+                                                                mDatabase = FirebaseDatabase.getInstance().getReference();
+                                                                String cast_id = route.getId().substring(route.getId().lastIndexOf(":") + 1);
+                                                                DatabaseReference ref = mDatabase.child("cast").child(cast_id);
+
                                                                 if (mRemoteMediaPlayerItem.getMediaStatus().getPlayerState() == 2) {
                                                                     while (current_playing.size() <= position)
                                                                         current_playing.add(null);
                                                                     MediaMetadata music_meta = mRemoteMediaPlayerItem.getMediaInfo().getMetadata();
+                                                                    albumCovers = new ArrayList<>();
                                                                     if (music_meta.getString(MediaMetadata.KEY_ARTIST) != null) {
                                                                         current_playing.set(position, music_meta.getString(MediaMetadata.KEY_TITLE) + " | " + music_meta.getString(MediaMetadata.KEY_ARTIST));
+                                                                        if (music_meta.getImages() != null) {
+                                                                            for (WebImage item : music_meta.getImages()) {
+                                                                                albumCovers.add(new AlbumCover(Integer.toString(item.getWidth()), Integer.toString(item.getHeight()), item.getUrl().toString()));
+                                                                            }
+                                                                        }
+                                                                        ref.setValue(new FirebaseMusicInfo(music_meta.getString(MediaMetadata.KEY_TITLE), music_meta.getString(MediaMetadata.KEY_ARTIST), mRemoteMediaPlayerItem.getMediaStatus().getPlayerState(), albumCovers));
                                                                     }
                                                                     else {
-                                                                        current_playing.set(position, music_meta.getString(MediaMetadata.KEY_TITLE));
+                                                                        ref.setValue(new FirebaseMusicInfo(music_meta.getString(MediaMetadata.KEY_TITLE), "", mRemoteMediaPlayerItem.getMediaStatus().getPlayerState(), albumCovers));
                                                                     }
                                                                     currentPlayingAdapter.refreshEvents(current_playing);
                                                                 } else {
                                                                     while (current_playing.size() <= position)
                                                                         current_playing.add(null);
                                                                     current_playing.set(position, null);
+                                                                    ref.setValue(new FirebaseMusicInfo("", "", mRemoteMediaPlayerItem.getMediaStatus().getPlayerState(), albumCovers));
                                                                     currentPlayingAdapter.refreshEvents(current_playing);
                                                                 }
                                                             }
